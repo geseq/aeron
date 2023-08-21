@@ -20,6 +20,7 @@
 #endif
 
 #include <string.h>
+#include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
 #include "util/aeron_netutil.h"
@@ -307,6 +308,13 @@ int aeron_lookup_interfaces_from_ifaddrs(aeron_ifaddr_func_t func, void *clientd
             continue;
         }
 
+        // Print the interface details
+        printf("Interface Name: %s\n", ifa->ifa_name);
+        printf("Interface Address: %p\n", (void *)ifa->ifa_addr); // assuming address is a pointer, you might need to cast/format differently based on your use case
+        printf("Interface Netmask: %p\n", (void *)ifa->ifa_netmask); // assuming netmask is a pointer, you might need to cast/format differently
+        printf("Interface Flags: %u\n", ifa->ifa_flags);
+        printf("---------------\n"); // separator for better clarity between interfaces
+
         result += func(
             clientd,
             ifa->ifa_name,
@@ -317,7 +325,6 @@ int aeron_lookup_interfaces_from_ifaddrs(aeron_ifaddr_func_t func, void *clientd
 
     return result;
 }
-
 uint32_t aeron_ipv4_netmask_from_prefixlen(size_t prefixlen)
 {
     uint32_t value;
